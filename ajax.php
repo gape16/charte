@@ -46,6 +46,7 @@ if (isset($_POST['reponses'])) {
 				$query_insert_com=$bdd->query("INSERT INTO commentaires (id_client, id_categorie, commentaires) VALUES ('$id_client','$key','$value','')");
 			}
 			// echo "l'id client n°".$key." est égal à ".$value;
+			//tu es sûr
 		}
 	}
 }
