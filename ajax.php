@@ -47,7 +47,6 @@ if (isset($_POST['reponses'])) {
 			}
 			// echo "l'id client n°".$key." est égal à ".$value;
 			//n'importe quoi
-			//sublime
 			
 		}
 	}

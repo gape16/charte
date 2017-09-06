@@ -8,7 +8,7 @@ try {
     echo 'Connexion échouée : ' . $e->getMessage();
 }
 
-$query_list_webdesigner= $bdd->query("SELECT nom, prenom FROM webdesigner");
+$query_list_webdesigner= $bdd->query("SELECT nom, prenom FROM webdesigner order by nom");
 
 $query_categorie=$bdd->query("SELECT nom_categorie FROM categorie")->fetchAll();
 
@@ -94,6 +94,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                                                     <li><a href="#team">TUTOS</a></li>
                                                     <li><a href="#contact">AIDE</a></li>
                                                     <li><a class="nom_webdesigner" style="color:#4c4c4c;text-transform: none;"></a></li>
+                                                    <li><a class="deco" style="color:#4c4c4c;text-transform: none;">Deco</a></li>
                                                 </ul>
 
 
@@ -160,7 +161,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                                                 <?php 
                                                 $icons=array('tint','mobile','tachometer');
                                                 foreach ($query_categorie as $key_cat => $value_cat) {?>
-                                                <li role="presentation"><a href="#<?php echo $key_cat;?>" aria-controls="<?php echo $key_cat;?>" role="tab" data-toggle="tab"><i class="fa fa-<?php echo $icons[$key_cat];?>"></i> <br /><?php echo $value_cat['nom_categorie']; ?></a></li>
+                                                <li role="presentation"><a><i class="fa fa-<?php echo $icons[$key_cat];?>"></i> <br /><?php echo $value_cat['nom_categorie']; ?></a></li>
                                                 <?php }?>
                                             </ul>
 
@@ -1520,23 +1521,28 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     })
                     .done(function(data) {
                         console.log(data);
-                    })
-                    
+                    })   
+                });
+
+                $(".deco").on('click', function(event) {
+                    event.preventDefault();
+                    $.cookie("webdesigner", "dd", { expires: -1 });
+                    location.reload();
                 });
 
                 if(!getCookie('webdesigner')){
                     setTimeout(function() {
-                       if ($('#test-popup').length) {
-                         $.magnificPopup.open({
-                            items: {
-                                src: '#test-popup' 
-                            },
-                            closeOnBgClick: 'false',
-                            modal: 'true',
-                            type: 'inline'
-                        });
-                     }
-                 }, 2000);
+                     if ($('#test-popup').length) {
+                       $.magnificPopup.open({
+                        items: {
+                            src: '#test-popup' 
+                        },
+                        closeOnBgClick: 'false',
+                        modal: 'true',
+                        type: 'inline'
+                    });
+                   }
+               }, 2000);
                 }
             })
 
