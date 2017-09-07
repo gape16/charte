@@ -26,7 +26,8 @@ if(isset($_POST['num'])){
 }
 if (isset($_POST['reponses'])) {
 	$id_client=$_POST['id_client'];
-	$comments=$_POST['comments'];
+	$comments=utf8_decode($_POST['comments']);
+	$id_categorie=$_POST['id_categorie'];
 	foreach ($_POST['reponses'] as $key => $value) {
 		if($value !=""){
 			// test si la ligne de la question pour ce client existe
@@ -41,13 +42,20 @@ if (isset($_POST['reponses'])) {
 				$query_insert=$bdd->query("INSERT INTO checked (id_client, id_question, reponse, reponse_control) VALUES ('$id_client','$key','$value','')");
 			}
 			if ($nb_test_com > 0) {
-				$query_replace_com=$bdd->query("UPDATE commentaires SET commentaire='$comments' WHERE id_client='$id_client' and id_categorie='$id_categorie'");
+				// $query_replace_com=$bdd->query("UPDATE commentaires SET commentaire='$comments' WHERE id_client='$id_client' and id_categorie='$id_categorie'");
+				$stmt = $bdd->prepare("UPDATE commentaires SET commentaire=? WHERE id_client=? and id_categorie=?");
+				$stmt->bindParam(1, $comments);
+				$stmt->bindParam(2, $id_client);
+				$stmt->bindParam(3, $id_categorie);
+				$stmt->execute();
 			}else{
-				$query_insert_com=$bdd->query("INSERT INTO commentaires (id_client, id_categorie, commentaires) VALUES ('$id_client','$key','$value','')");
+				// $query_insert_com=$bdd->query("INSERT INTO commentaires (id_client, id_categorie, commentaire) VALUES ('$id_client','$id_categorie','$comments')");
+				$stmt = $bdd->prepare("INSERT INTO commentaires (id_client, id_categorie, commentaire) VALUES (?,?,?)");
+				$stmt->bindParam(1, $id_client);
+				$stmt->bindParam(2, $id_categorie);
+				$stmt->bindParam(3, $$comments);
+				$stmt->execute();
 			}
-			// echo "l'id client n°".$key." est égal à ".$value;
-			//n'importe quoi
-			
 		}
 	}
 }

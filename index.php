@@ -227,6 +227,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                                                                                         </div>
                                                                                         <?php } ?>
                                                                                         <textarea name="" id="" style="width: 100%;min-height:100px;" class="commentaire_<?php echo $key_categorie;?>" placeholder="commentaires"></textarea><br><br>
+                                                                                        <a class="btn btn-primary retour_<?php echo $key_categorie;?>" style="margin-top: -3px;width: 49%;background: #a08e7f;border-color:#a08e7f;">Retour</a>
                                                                                         <a class="btn btn-primary suivant_<?php echo $key_categorie;?>" style="margin-top: -3px;width: 49%;">Suivant</a>
                                                                                     </div>
                                                                                 </div>
@@ -1495,11 +1496,32 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     }
                 })
 
+                $("[class*='retour_']").on('click', function(event) {
+                    event.preventDefault();
+                    var la_categorie=$(this).attr('class').split("retour_");
+                    la_categorie=la_categorie[1];
+                    if(la_categorie==0){
+                        $(".tab-pane").removeClass('active');
+                        $("#webdesign").addClass('active');
+                        $('.service_tabe_menu li').removeClass('active');
+                        $(".service_tabe_menu li:nth-child(1)").addClass('active');
+                    }else{
+                        la_categorie_inf=la_categorie*1-1;
+                        la_categorie_supp=la_categorie*1+1;
+                        $(".tab-pane").removeClass('active');
+                        $("#"+la_categorie_inf).addClass('active');
+                        $('.service_tabe_menu li').removeClass('active');
+                        $(".service_tabe_menu li:nth-child("+la_categorie_supp+")").addClass('active');
+                    }
+                })
+
                 $("[class*='suivant_']").on('click', function(event) {
                     event.preventDefault();
                     var la_categorie=$(this).attr('class').split("suivant_");
                     // la_categorie contient le numéro de catégorie des questions pour pouvoir prendre les réponses 
                     la_categorie=la_categorie[1];
+                    la_categorie_plus=la_categorie*1+1;
+                    la_categorie_plus_p=la_categorie*1+3;
                     reponse =[];
                     $("#"+la_categorie+" input[class*='question']").each(function(index, el) {
                         var lindex= $(this).attr('class').split("_");
@@ -1512,8 +1534,8 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                             reponse[lindex] = 0;
                         }
                     });
-                    var comment= $("#"+la_categorie+" .commentaire_"+la_categorie).text();
-                    console.log(reponse);
+                    var comment= $("#"+la_categorie+" .commentaire_"+la_categorie).val();
+                    console.log(comment);
                     $.ajax({
                         url: 'ajax.php',
                         type: 'POST',
@@ -1521,6 +1543,10 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     })
                     .done(function(data) {
                         console.log(data);
+                        $(".tab-pane").removeClass('active');
+                        $("#"+la_categorie_plus).addClass('active');
+                        $('.service_tabe_menu li').removeClass('active');
+                        $(".service_tabe_menu li:nth-child("+la_categorie_plus_p+")").addClass('active');
                     })   
                 });
 
@@ -1532,17 +1558,17 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
 
                 if(!getCookie('webdesigner')){
                     setTimeout(function() {
-                     if ($('#test-popup').length) {
-                       $.magnificPopup.open({
-                        items: {
-                            src: '#test-popup' 
-                        },
-                        closeOnBgClick: 'false',
-                        modal: 'true',
-                        type: 'inline'
-                    });
-                   }
-               }, 2000);
+                       if ($('#test-popup').length) {
+                         $.magnificPopup.open({
+                            items: {
+                                src: '#test-popup' 
+                            },
+                            closeOnBgClick: 'false',
+                            modal: 'true',
+                            type: 'inline'
+                        });
+                     }
+                 }, 2000);
                 }
             })
 
