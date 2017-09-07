@@ -213,7 +213,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                                                                                             <div class="panel-heading" role="tab" id="heading<?php echo $key;?>">
                                                                                                 <h4 class="panel-title">
                                                                                                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $key;?>" aria-expanded="false" aria-controls="collapse<?php echo $key;?>" class="collapsed">
-                                                                                                        <i class="fa fa-picture-o"></i> <?php echo utf8_encode($value['titre']);?> 
+                                                                                                        <i class="fa <?php echo $value['icone'];?>"></i> <?php echo utf8_encode($value['titre']);?> 
                                                                                                     </a>
                                                                                                     <input type="checkbox" class="question_<?php echo $value['id_liste'];?>">
                                                                                                 </h4>
@@ -228,12 +228,15 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                                                                                         <?php } ?>
                                                                                         <textarea name="" id="" style="width: 100%;min-height:100px;" class="commentaire_<?php echo $key_categorie;?>" placeholder="commentaires"></textarea><br><br>
                                                                                         <a class="btn btn-primary retour_<?php echo $key_categorie;?>" style="margin-top: -3px;width: 49%;background: #a08e7f;border-color:#a08e7f;">Retour</a>
+                                                                                        <?php if($value_categorie == end($query_categorie)){?>
+                                                                                        <a class="btn btn-primary fin_<?php echo $key_categorie;?>" style="margin-top: -3px;width: 49%;">Fin</a>
+                                                                                        <?php }else{?>
                                                                                         <a class="btn btn-primary suivant_<?php echo $key_categorie;?>" style="margin-top: -3px;width: 49%;">Suivant</a>
+                                                                                        <?php }?>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                         <div class="col-sm-6" style="display: flex;">
                                                                             <div class="single_choose" style="margin: auto;">
                                                                                 <div class="single_choose_img" style="display: flex;">
@@ -1547,6 +1550,38 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                         $("#"+la_categorie_plus).addClass('active');
                         $('.service_tabe_menu li').removeClass('active');
                         $(".service_tabe_menu li:nth-child("+la_categorie_plus_p+")").addClass('active');
+                    })   
+                });
+
+                $("[class*='fin_']").on('click', function(event) {
+                    event.preventDefault();
+                    var la_categorie=$(this).attr('class').split("fin_");
+                    // la_categorie contient le numéro de catégorie des questions pour pouvoir prendre les réponses 
+                    la_categorie=la_categorie[1];
+                    la_categorie_plus=la_categorie*1+1;
+                    la_categorie_plus_p=la_categorie*1+3;
+                    reponse =[];
+                    $("#"+la_categorie+" input[class*='question']").each(function(index, el) {
+                        var lindex= $(this).attr('class').split("_");
+                        lindex=lindex[1];
+                        if($(this).is(":checked")){
+                            // console.log("la class "+$(this).attr('class')+" est checked");
+                            reponse[lindex] = 1;
+                        }else{
+                            // console.log("la class "+$(this).attr('class')+" n'est pas checked");
+                            reponse[lindex] = 0;
+                        }
+                    });
+                    var comment= $("#"+la_categorie+" .commentaire_"+la_categorie).val();
+                    console.log(comment);
+                    $.ajax({
+                        url: 'ajax.php',
+                        type: 'POST',
+                        data: {id_categorie: la_categorie, reponses: reponse, id_client: $('.num_client').val(), comments: comment, fin: 'fin' }
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                        alert('fini');
                     })   
                 });
 
