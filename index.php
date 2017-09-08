@@ -34,7 +34,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/magnific-popup.css">
 
@@ -1485,7 +1485,11 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                                 url: "ajax.php",
                                 data: "num="+$('.num_client').val()
                             }).done(function( msg ) {
-                                console.log( msg );
+                                if(msg!=""){
+                                    $(".tab-pane").not(':first').remove();
+                                    $(".tab-content").append(msg);
+                                    $("#0").addClass('active');
+                                }
                             });
                             $(".tab-pane").removeClass('active');
                             $("#0").addClass('active');
@@ -1499,7 +1503,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     }
                 })
 
-                $("[class*='retour_']").on('click', function(event) {
+                $("#service").on('click', "[class*='retour_']", function(event) {
                     event.preventDefault();
                     var la_categorie=$(this).attr('class').split("retour_");
                     la_categorie=la_categorie[1];
@@ -1518,7 +1522,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     }
                 })
 
-                $("[class*='suivant_']").on('click', function(event) {
+                $("#service").on('click', "[class*='suivant_']", function(event) {
                     event.preventDefault();
                     var la_categorie=$(this).attr('class').split("suivant_");
                     // la_categorie contient le numéro de catégorie des questions pour pouvoir prendre les réponses 
@@ -1553,7 +1557,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     })   
                 });
 
-                $("[class*='fin_']").on('click', function(event) {
+                $("#service").on('click', "[class*='fin_']", function(event) {
                     event.preventDefault();
                     var la_categorie=$(this).attr('class').split("fin_");
                     // la_categorie contient le numéro de catégorie des questions pour pouvoir prendre les réponses 
@@ -1573,15 +1577,14 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                         }
                     });
                     var comment= $("#"+la_categorie+" .commentaire_"+la_categorie).val();
-                    console.log(comment);
+                    // console.log(comment);
                     $.ajax({
                         url: 'ajax.php',
                         type: 'POST',
                         data: {id_categorie: la_categorie, reponses: reponse, id_client: $('.num_client').val(), comments: comment, fin: 'fin' }
                     })
                     .done(function(data) {
-                        console.log(data);
-                        alert('fini');
+                        //fin
                     })   
                 });
 
@@ -1593,17 +1596,17 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
 
                 if(!getCookie('webdesigner')){
                     setTimeout(function() {
-                       if ($('#test-popup').length) {
-                         $.magnificPopup.open({
-                            items: {
-                                src: '#test-popup' 
-                            },
-                            closeOnBgClick: 'false',
-                            modal: 'true',
-                            type: 'inline'
-                        });
-                     }
-                 }, 2000);
+                     if ($('#test-popup').length) {
+                       $.magnificPopup.open({
+                        items: {
+                            src: '#test-popup' 
+                        },
+                        closeOnBgClick: 'false',
+                        modal: 'true',
+                        type: 'inline'
+                    });
+                   }
+               }, 2000);
                 }
             })
 
