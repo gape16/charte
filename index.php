@@ -37,6 +37,7 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/sweetalert.min.css">
 
 
     <!--For Plugins external css-->
@@ -47,9 +48,10 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
 
     <!--Theme Responsive css-->
     <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
 
     <script src="assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
+    <script src="assets/js/sweetalert-dev.min.js"></script>
 
 </head>
 
@@ -1589,6 +1591,10 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                         data: {id_categorie: la_categorie, reponses: reponse, id_client: $('.num_client').val(), comments: comment, fin: 'fin' }
                     })
                     .done(function(data) {
+                     swal(
+                      'Contrôle fait',
+                      'Youpi'
+                      )
                         //fin
                     })   
                 });
@@ -1601,24 +1607,32 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
 
                 if(!getCookie('webdesigner')){
                     setTimeout(function() {
-                       if ($('#test-popup').length) {
-                         $.magnificPopup.open({
-                            items: {
-                                src: '#test-popup' 
-                            },
-                            closeOnBgClick: 'false',
-                            modal: 'true',
-                            type: 'inline'
-                        });
-                     }
-                 }, 2000);
+                     if ($('#test-popup').length) {
+                       $.magnificPopup.open({
+                        items: {
+                            src: '#test-popup' 
+                        },
+                        closeOnBgClick: 'false',
+                        modal: 'true',
+                        type: 'inline'
+                    });
+                   }
+               }, 2000);
                 }
             })
 
-        </script>             
 
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/main.js"></script>
+//Bind enter to commencer
+$(document).keypress(function(e){
+    if (e.which == 13){
+        $(".commencer").click();
+    }
+});
 
-    </body>
-    </html>
+</script>             
+
+<script src="assets/js/plugins.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
