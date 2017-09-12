@@ -101,6 +101,7 @@ if(isset($_POST['num'])){
 		$comments=utf8_decode($_POST['comments']);
 		$id_categorie=$_POST['id_categorie'];
 		foreach ($_POST['reponses'] as $key => $value) {
+			$reponse_contr=utf8_decode($_POST['reponse_cont'][$key]);
 			if($value !=""){
 // test si la ligne de la question pour ce client existe
 				$query_test=$bdd->query("SELECT * FROM checked where id_client='$id_client' and id_question='$key'");
@@ -109,9 +110,19 @@ if(isset($_POST['num'])){
 				$nb_test_com=$query_test_com->rowCount();
 //si il y a déjà une ligne on la remplace sinon on la créée
 				if($nb_test>0){
-					$query_replace=$bdd->query("UPDATE checked SET reponse='$value' WHERE id_client='$id_client' and id_question='$key'");
+					$stm = $bdd->prepare("UPDATE checked SET reponse=?, reponse_control=? WHERE id_client=? and id_question=?");
+					$stm->bindParam(1, $value);
+					$stm->bindParam(2, $reponse_contr);
+					$stm->bindParam(3, $id_client);
+					$stm->bindParam(4, $key);
+					$stm->execute();
 				}else{
-					$query_insert=$bdd->query("INSERT INTO checked (id_client, id_question, reponse, reponse_control) VALUES ('$id_client','$key','$value','')");
+					$stm = $bdd->prepare("INSERT INTO checked (id_client, id_question, reponse, reponse_control) VALUES (?,?,?,?)");
+					$stm->bindParam(1, $id_client);
+					$stm->bindParam(2, $key);
+					$stm->bindParam(3, $value);
+					$stm->bindParam(4, $reponse_control);
+					$stm->execute();
 				}
 				if ($nb_test_com > 0) {
 // $query_replace_com=$bdd->query("UPDATE commentaires SET commentaire='$comments' WHERE id_client='$id_client' and id_categorie='$id_categorie'");

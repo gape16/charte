@@ -1530,9 +1530,14 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     la_categorie_plus=la_categorie*1+1;
                     la_categorie_plus_p=la_categorie*1+3;
                     reponse =[];
+                    reponse_control =[];
                     $("#"+la_categorie+" input[class*='question']").each(function(index, el) {
                         var lindex= $(this).attr('class').split("_");
                         lindex=lindex[1];
+                        if($(this).find("input[class*='reponse']")){
+                            reponse_control[lindex] = $(".reponse_"+lindex).val();
+
+                        }
                         if($(this).is(":checked")){
                             // console.log("la class "+$(this).attr('class')+" est checked");
                             reponse[lindex] = 1;
@@ -1542,11 +1547,11 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                         }
                     });
                     var comment= $("#"+la_categorie+" .commentaire_"+la_categorie).val();
-                    console.log(comment);
+                    console.log(reponse_control);
                     $.ajax({
                         url: 'ajax.php',
                         type: 'POST',
-                        data: {id_categorie: la_categorie, reponses: reponse, id_client: $('.num_client').val(), comments: comment }
+                        data: {id_categorie: la_categorie, reponses: reponse, id_client: $('.num_client').val(), comments: comment, reponse_cont: reponse_control  }
                     })
                     .done(function(data) {
                         console.log(data);
@@ -1596,17 +1601,17 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
 
                 if(!getCookie('webdesigner')){
                     setTimeout(function() {
-                     if ($('#test-popup').length) {
-                       $.magnificPopup.open({
-                        items: {
-                            src: '#test-popup' 
-                        },
-                        closeOnBgClick: 'false',
-                        modal: 'true',
-                        type: 'inline'
-                    });
-                   }
-               }, 2000);
+                       if ($('#test-popup').length) {
+                         $.magnificPopup.open({
+                            items: {
+                                src: '#test-popup' 
+                            },
+                            closeOnBgClick: 'false',
+                            modal: 'true',
+                            type: 'inline'
+                        });
+                     }
+                 }, 2000);
                 }
             })
 
