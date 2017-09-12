@@ -91,7 +91,9 @@ if(isset($_POST['num'])){
 				$query_liste_0=$bdd->query("SELECT * FROM liste where categorie = 0");
 				$query_liste_1=$bdd->query("SELECT * FROM liste where categorie = 1");
 				$query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
+				$query_fini=$bdd->query("SELECT fini FROM client where num_client = '$numero'")->fetch();
 				//GRAPH
+
 				foreach ($query_categorie as $key_categorie => $value_categorie) {?>
 				<div role="tabpanel" class="tab-pane" id="<?php echo $key_categorie;?>">
 					<div class="single_service_tab">
@@ -119,6 +121,14 @@ if(isset($_POST['num'])){
 																	<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $key_categorie;?><?php echo $key;?>" aria-expanded="false" aria-controls="collapse<?php echo $key_categorie;?><?php echo $key;?>" class="collapsed">
 																		<i class="fa <?php echo $value['icone'];?>"></i> <?php echo utf8_encode($value['titre']);?> 
 																	</a>
+																	<?php //en gros, pour savoir si le check est fini par le graph c'est :
+																	if($query_fini['fini']==1){
+																		echo "oui";
+																		//la le test est fini donc j'enléve la possibilité aux graphs de check
+																	}else{
+																		echo "nnon";
+																		// la le test est pas fini donc je laisse
+																	}?>
 																	<input type="checkbox" <?php if($query_que['reponse']==1){ echo "checked"; }?> class="question_<?php echo $value['id_liste'];?>">
 																</h4>
 															</div>
