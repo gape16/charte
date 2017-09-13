@@ -1536,9 +1536,10 @@ $query_liste_2=$bdd->query("SELECT * FROM liste where categorie = 2");
                     $("#"+la_categorie+" input[class*='question']").each(function(index, el) {
                         var lindex= $(this).attr('class').split("_");
                         lindex=lindex[1];
-                        if($(this).find("input[class*='reponse']")){
+                        if($("*[class*='reponse']").length){
                             reponse_control[lindex] = $(".reponse_"+lindex).val();
-
+                        }else{
+                            reponse_control[lindex] = "";
                         }
                         if($(this).is(":checked")){
                             // console.log("la class "+$(this).attr('class')+" est checked");
